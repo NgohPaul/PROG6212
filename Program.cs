@@ -1,6 +1,4 @@
-using CMCS.Models;
-
-namespace CMCS
+namespace ABCRetails
 {
     public class Program
     {
@@ -13,71 +11,26 @@ namespace CMCS
 
             var app = builder.Build();
 
-            // Seed some test claims
-            SeedClaims();
-
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles(); // Make sure static files are served
             app.UseRouting();
 
             app.UseAuthorization();
 
+            app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}")
+                .WithStaticAssets();
 
             app.Run();
-        }
-
-        // Method to seed some test claims
-        private static void SeedClaims()
-        {
-            if (!ClaimData.Claims.Any())
-            {
-                ClaimData.Claims.AddRange(new List<ClaimViewModel>
-                {
-                    new ClaimViewModel
-                    {
-                        LecturerName = "Dr. Smith",
-                        ClaimMonth = "October",
-                        ContractType = "Part-Time",
-                        HoursWorked = 40,
-                        HourlyRate = 250,
-                        TotalAmount = 40 * 250,
-                        Notes = "October teaching hours",
-                        Status = "Submitted"
-                    },
-                    new ClaimViewModel
-                    {
-                        LecturerName = "Prof. Johnson",
-                        ClaimMonth = "September",
-                        ContractType = "Full-Time",
-                        HoursWorked = 160,
-                        HourlyRate = 200,
-                        TotalAmount = 160 * 200,
-                        Notes = "September contract hours",
-                        Status = "Submitted"
-                    },
-                    new ClaimViewModel
-                    {
-                        LecturerName = "Dr. Williams",
-                        ClaimMonth = "August",
-                        ContractType = "Part-Time",
-                        HoursWorked = 80,
-                        HourlyRate = 180,
-                        TotalAmount = 80 * 180,
-                        Notes = "August teaching hours",
-                        Status = "Submitted"
-                    }
-                });
-            }
         }
     }
 }
